@@ -1,0 +1,17 @@
+.header-tab {
+    display: flex;
+    flex-direction: row !important;
+    justify-content: space-between;
+}
+
+.link_ticket {
+    text-decoration: none;
+    color: black;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.link_ticket:hover {
+    text-decoration:underline
+}

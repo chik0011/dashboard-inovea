@@ -1,0 +1,16 @@
+<div class="container-settings">
+  <h3>Paramètre</h3>
+  <hr>
+  <div class="container-darkmode">
+    <div class="conatainer-left">
+      <label>Dark mode</label>
+      <span>Activez le mode sombre pour réduire la fatigue visuelle, notamment dans les environnements peu éclairés.</span> 
+    </div>
+    <div class="container-right">
+      <p-toggleswitch 
+        [ngModel]="themeService.isDark()" 
+        (ngModelChange)="themeService.toggle()" 
+      />
+    </div>
+  </div>
+</div>

@@ -1,0 +1,26 @@
+<div class="header">
+
+  <div class="header__left">
+    <i class="pi pi-align-justify"></i>
+    <span class="header__title">Dashboard</span>
+  </div>
+
+  <div class="header__right">
+    <i class="pi pi-bell header__notification"></i>
+
+    <div class="header__user">
+      <span class="header__name">{{ lastname() }} {{ firstname() }}</span>
+      <span class="header__job">{{ job() }}</span>
+    </div>
+
+    <button class="avatar-btn" (click)="menu.toggle($event)">
+      <p-avatar
+        image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
+        shape="circle">
+      </p-avatar>
+    </button>
+
+    <p-menu #menu [model]="items" [popup]="true" />
+  </div>
+
+</div>

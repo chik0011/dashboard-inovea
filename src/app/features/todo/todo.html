@@ -1,0 +1,187 @@
+<div class="container-timesheets">
+  <div cdkDropListGroup>
+    <div class="container-todo">
+      <div class="header-container-todo">
+        <div class="header-container-title">
+          <label class="title-todo" for="todo-draft">À faire</label>
+          <p-badge severity="secondary" [size]="'small'" [severity]="'secondary'" value="{{ totalTodo() }}" />
+        </div>
+        
+        <div>
+          <p-button [size]="'small'" [text]="true" (click)="openListTasksMenu($event, 'todo')" icon="pi pi-ellipsis-v" severity="secondary" />
+          <p-button [size]="'small'" [text]="true" icon="pi pi-plus" severity="secondary" />
+        </div>
+      </div>
+      
+      <div
+        cdkDropList
+        [cdkDropListData]="todo()"
+        class="todo-list"
+        id="todo"
+        (cdkDropListDropped)="drop($event)"
+      >
+        @for (item of todo(); track item) {
+          <div class="todo-box" cdkDrag (click)="openTaskDetail(item)">
+            <label class="title" for="title">{{ item.title }}</label>
+            <label class="desc" for="description">{{ stripHtml(item.short_desc) }}</label>
+            <div class="action-box">
+              <div class="info-box">
+                <i
+                  class="pi pi-flag"
+                  [style.background-color]="severityBgColor(item.severity)"
+                  [style.color]="severityColor(item.severity)"
+                  style="font-size: 13px;"
+                ></i>  
+                <label class="box-date"><i class="pi pi-calendar" style="font-size: 13px;"></i> {{ item.due_date_short_format }}</label>
+              </div>
+
+              <svg viewBox="0 0 26 26" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="13" cy="13" r="12" [style.fill]="item.color" />
+              </svg>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="container-todo">
+      <div class="header-container-todo">
+        <div class="header-container-title">
+          <label class="title-todo title-todo-inprogress" for="todo-draft">En cours</label>
+          <p-badge severity="secondary" [size]="'small'" [severity]="'secondary'" value="{{ totalInProgress() }}" />
+        </div>
+        <div>
+          <p-button [size]="'small'" [text]="true" (click)="openListTasksMenu($event, 'inProgress')" icon="pi pi-ellipsis-v" severity="secondary" />
+          <p-button [size]="'small'" [text]="true" icon="pi pi-plus" severity="secondary" />
+        </div>
+      </div>
+      <div
+        cdkDropList
+        [cdkDropListData]="inProgress()"
+        id="inProgress"
+        class="todo-list"
+        (cdkDropListDropped)="drop($event)"
+      >
+        @for (item of inProgress(); track item) {
+          <div class="todo-box" cdkDrag (click)="openTaskDetail(item)">
+            <label class="title" for="title">{{ item.title }}</label>
+            <label class="desc" for="description">{{ stripHtml(item.short_desc) }}</label>
+            <div class="action-box">
+              <div class="info-box">
+                <i
+                  class="pi pi-flag"
+                  [style.background-color]="severityBgColor(item.severity)"
+                  [style.color]="severityColor(item.severity)"
+                  style="font-size: 13px;"
+                ></i>  
+                <label class="box-date"><i class="pi pi-calendar" style="font-size: 13px;"></i> {{ item.due_date_short_format }}</label>
+              </div>
+
+              <svg viewBox="0 0 26 26" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="13" cy="13" r="12" [style.fill]="item.color" />
+              </svg>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="container-todo">
+      <div class="header-container-todo">
+        <div class="header-container-title">
+          <label class="title-todo title-todo-testing" for="todo-draft">À tester</label>
+          <p-badge severity="secondary" [size]="'small'" [severity]="'secondary'" value="{{ totalTesting() }}" />
+        </div>
+        <div>
+          <p-button [size]="'small'" [text]="true" (click)="openListTasksMenu($event, 'testing')" icon="pi pi-ellipsis-v" severity="secondary" />
+          <p-button [size]="'small'" [text]="true" icon="pi pi-plus" severity="secondary" />
+        </div>
+      </div>
+      <div
+        cdkDropList
+        [cdkDropListData]="testing()"
+        id="testing"
+        class="todo-list"
+        (cdkDropListDropped)="drop($event)"
+      >
+        @for (item of testing(); track item) {
+          <div class="todo-box" cdkDrag (click)="openTaskDetail(item)">
+            <label class="title" for="title">{{ item.title }}</label>
+            <label class="desc" for="description">{{ stripHtml(item.short_desc) }}</label>
+            <div class="action-box">
+              <div class="info-box">
+                <i
+                  class="pi pi-flag"
+                  [style.background-color]="severityBgColor(item.severity)"
+                  [style.color]="severityColor(item.severity)"
+                  style="font-size: 13px;"
+                ></i>                  
+                <label class="box-date"><i class="pi pi-calendar" style="font-size: 13px;"></i> {{ item.due_date_short_format }}</label>
+              </div>
+
+              <svg viewBox="0 0 26 26" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="13" cy="13" r="12" [style.fill]="item.color" />
+              </svg>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="container-todo">
+      <div class="header-container-todo">
+        <div class="header-container-title">
+          <label class="title-todo title-todo-done" for="todo-draft">Terminé</label>
+          <p-badge severity="secondary" [size]="'small'" [severity]="'secondary'" value="{{ totalDone() }}" />
+        </div>
+        <div>
+          <p-button [size]="'small'" [text]="true" (click)="openListTasksMenu($event, 'done')" icon="pi pi-ellipsis-v" severity="secondary" />
+          <p-button [size]="'small'" [text]="true" icon="pi pi-plus" severity="secondary" />
+        </div>
+      </div>
+      <div
+        cdkDropList
+        [cdkDropListData]="done()"
+        id="done"
+        class="todo-list"
+        (cdkDropListDropped)="drop($event)"
+      >
+        @for (item of done(); track item) {
+          <div class="todo-box" cdkDrag (click)="openTaskDetail(item)">
+            <label class="title" for="title">{{ item.title }}</label>
+            
+            @if (item.description) {
+              <label class="desc" for="description">{{ stripHtml(item.short_desc) }}</label>
+            }
+            
+            <div class="action-box">
+              <div class="info-box">
+                <i
+                  class="pi pi-flag"
+                  [style.background-color]="severityBgColor(item.severity)"
+                  [style.color]="severityColor(item.severity)"
+                  style="font-size: 13px;"
+                ></i>                
+                <label class="box-date"><i class="pi pi-calendar" style="font-size: 13px;"></i> {{ item.due_date_short_format }}</label>
+              </div>
+
+              <svg viewBox="0 0 26 26" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="13" cy="13" r="12" [style.fill]="item.color" />
+              </svg>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+
+<p-menu #op [model]="items" [popup]="true" appendTo="self" />
+
+<app-todo-detail
+  [task]="selectedTask()"
+  [(visible)]="detailVisible"
+  (taskUpdated)="onTaskUpdated($event)"
+  (taskCloned)="onTaskCloned($event)"
+  (taskArchived)="onTaskArchived($event)"
+/>

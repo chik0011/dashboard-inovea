@@ -1,0 +1,115 @@
+<div class="card">
+    <p-table
+        #dt2
+        [value]="loading() ? skeletonRows : tickets"
+        dataKey="id"
+        [rows]="5"
+        [rowsPerPageOptions]="[5, 10, 25, 50]"
+        [loading]="false"
+        [paginator]="true"
+        [globalFilterFields]="['ref', 'fk_soc_name', 'date_create', 'status']"
+        [tableStyle]="{ 'min-width': '75rem', 'font-size': '14px' }"
+    >
+        <ng-template #caption>
+            <div class="flex justify-between header-tab">
+                <p-iconfield iconPosition="left" class="ml-auto">
+                    <p-inputicon>
+                        <i class="pi pi-search"></i>
+                    </p-inputicon>
+                    <input pInputText type="text" (input)="dt2.filterGlobal($event.target.value, 'contains')" placeholder="Recherche global" [disabled]="loading()" />
+                </p-iconfield>
+                <p-button [outlined]="true" icon="pi pi-filter-slash" severity="secondary" label="Réinitialiser" (click)="clear(dt2)" />
+
+            </div>
+        </ng-template>
+        <ng-template #header>
+            <tr>
+                <th style="width:22%">Réf.</th>
+                <th style="width:22%">Tiers</th>
+                <th style="width:22%">Date création</th>
+                <th style="width:22%">Assigné à</th>
+                <th style="width:22%">Status</th>
+            </tr>
+            <tr>
+                <th>
+                    <p-columnFilter type="text" field="ref" placeholder="Aucun" ariaLabel="Filter Ref" filterOn="input"></p-columnFilter>
+                </th>
+                <th>
+                    <p-columnFilter type="text" field="fk_soc_name" placeholder="Aucun" ariaLabel="Filter Third Party" filterOn="input"></p-columnFilter>
+                </th>
+                <th>
+                    <p-columnFilter type="date"  dateFormat="dd.mm.yy" placeholder="Aucun" field="date_create"></p-columnFilter>
+                </th>
+                <th>
+                    <p-columnFilter field="fk_user_assign" matchMode="in" [showMenu]="false">
+                        <ng-template #filter let-value let-filter="filterCallback">
+                            <p-multiselect [ngModel]="value" matchMode="in" [options]="representatives" optionValue="id" placeholder="Tous" (onChange)="filter($event.value)" optionLabel="lastname" filterBy="lastname,firstname" style="min-width: 14rem" [panelStyle]="{ minWidth: '16rem' }">
+                                <ng-template let-option #item>
+                                    <div class="flex items-center gap-2">
+                                        <!--<img [alt]="option.label" src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{ option.image }}" style="width: 32px" />-->
+                                        <span>
+                                        @if (option.statut == 1) {
+                                            {{ option.lastname }} {{ option.firstname }}
+                                        } @else {
+                                            <del>{{ option.lastname }} {{ option.firstname }}</del>
+                                        }
+                                        </span>
+                                    </div>
+                                </ng-template>
+                            </p-multiselect>
+                        </ng-template>
+                    </p-columnFilter>
+                </th>
+                <th>
+                    <p-columnFilter field="status" matchMode="equals" [showMenu]="false">
+                        <ng-template #filter let-value let-filter="filterCallback">
+                            <p-select [ngModel]="value" [options]="statuses" (onChange)="filter($event.value)" placeholder="Tous" [showClear]="true" style="min-width: 12rem">
+                                <ng-template let-option #item>
+                                    <p-tag [value]="option.label" [severity]="getSeverity(option.value)" />
+                                </ng-template>
+                            </p-select>
+                        </ng-template>
+                    </p-columnFilter>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-ticket>
+            <tr>
+                @if (loading()) {
+                    <td><p-skeleton /></td>
+                    <td><p-skeleton /></td>
+                    <td><p-skeleton /></td>
+                    <td><p-skeleton width="5rem" /></td>
+                } @else {
+                    <td>
+                        <a href="{{getUrlDolibarrTicket(ticket.id)}}" class="link_ticket" target="_blank" rel="noopener noreferrer">
+                            <p-button [size]="'small'" icon="pi pi-external-link" [rounded]="true" [text]="true" severity="secondary" />
+                            {{ ticket.ref }}
+                        </a>
+                    </td>
+                    <td>
+                       {{ ticket.fk_soc_name }}
+                    </td>
+                    <td>
+                       {{ ticket.date_create | date:'medium' }}
+                    </td>
+                    <td>
+                        {{ this.getUserName(ticket.fk_user_assign) }}
+                        <!--<div class="flex items-center gap-2">
+                            <img [alt]="ticket.representative.lastname" src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{ ticket.representative.image }}" width="32" style="vertical-align: middle" />
+                            <span>{{ ticket.representative.name }}</span>
+                        </div>-->
+                    </td>
+                    <td>
+                        <p-tag [value]="getStatusLabel(ticket.status)" [severity]="getSeverity(ticket.status)" />
+                    </td>
+                }
+            </tr>
+        </ng-template>
+        <ng-template #emptymessage>
+            <tr>
+                <td colspan="5">Aucun tickets trouvé</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

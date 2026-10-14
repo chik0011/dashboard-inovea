@@ -1,0 +1,176 @@
+<p-dialog
+  [(visible)]="visible"
+  [modal]="true"
+  [style]="{ width: '750px'}"
+  [dismissableMask]="true"
+  position="top"
+>
+  @if (task()) {
+    <ng-template #header>
+      <div class="detail-header">
+        <div class="breadcrumb">
+          <i class="pi pi-arrow-up-right-and-arrow-down-left-from-center"></i>
+          <span>{{ task()!.ref }}</span>
+        </div>
+        <div class="header-actions">
+          <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" tooltipPosition="top" [pTooltip]="editMode() ? 'Annuler' : 'Modifier'" severity="secondary" (onClick)="toggleEdit()" />
+          <p-button icon="pi pi-clock" [rounded]="true" [text]="true" severity="secondary" tooltipPosition="top" pTooltip="Ajouter du temps" />
+          <a href="{{ getUrlDolibarrTask(task()!.id) }}" target="_blank" rel="noopener noreferrer" tooltipPosition="top" pTooltip="Ouvrir sur Dolibarr">
+            <p-button icon="pi pi-external-link" [rounded]="true" [text]="true" severity="secondary" />
+          </a>
+          <p-menu #todoActons [model]="items" [popup]="true" appendTo="body" />
+          <p-button [size]="'small'" [text]="true" (click)="openTaskMenu($event, task())" icon="pi pi-ellipsis-v" severity="secondary" />
+        </div>
+      </div>
+    </ng-template>
+
+    <form [formGroup]="form" (ngSubmit)="onSave()" class="task-detail-content">
+      @if (editMode()) {
+        <input pInputText formControlName="title" class="task-title-input" />
+      } @else {
+        <h3 class="task-title">{{ task()!.title }}</h3>
+      }
+
+      @if (!editMode()) {
+        <div class="actions-row">
+          <span class="color-trigger" (click)="colorPanel.toggle($event)">
+            <i class="pi pi-palette"></i> Couleur
+          </span>
+
+          <p-popover #colorPanel>
+            <div class="color-palette">
+              @for (c of colors; track c) {
+
+                <button
+                  type="button"
+                  class="color-swatch"
+                  [style.background]="c"
+                  [class.selected]="c === selectedColor()"
+                  (click)="selectColor(c); colorPanel.hide()"
+                ></button>
+              }
+            </div>
+          </p-popover>
+
+          <span class="severity-trigger" [style.color]="severityColor(selectedSeverity())" (click)="severityPanel.toggle($event)">
+            <i class="pi pi-flag" [style.color]="severityColor(selectedSeverity())"></i> Sévérité
+          </span>
+
+          <p-popover #severityPanel>
+            <div class="severity-list">
+              @for (s of severities; track s.value) {
+                <button
+                  type="button"
+                  class="severity-option"
+                  [class.selected]="s.value === selectedSeverity()"
+                  (click)="selectSeverity(s.value); severityPanel.hide()"
+                >
+                  <span>{{ s.label }}</span>
+                </button>
+              }
+            </div>
+          </p-popover>
+
+          <span class="severity-trigger" (click)="progressPanel.toggle($event)">
+            <i class="pi pi-percentage"></i> {{ selectedProgress() }}
+          </span>
+
+          <p-popover #progressPanel>
+            <div class="severity-list">
+              @for (s of progress; track s.value) {
+                <button
+                  type="button"
+                  class="severity-option"
+                  [class.selected]="s.value == selectedProgress()"
+                  (click)="selectProgress(s.value); progressPanel.hide()"
+                >
+                  <span>{{ s.label }}</span>
+                </button>
+              }
+            </div>
+          </p-popover>
+        </div>
+      }
+
+      <div class="detail-row">
+        <div class="row-label">
+          <i class="pi pi-info-circle"></i>
+          <span>Statut</span>
+        </div>
+        @if (editMode()) {
+          <p-select 
+            formControlName="status" 
+            [options]="statusOptions" 
+            optionLabel="label" 
+            placeholder="{{ statusLabel(task()!.status) }}" 
+            [showClear]="true"
+            styleClass="detail-input"
+          />
+        } @else {
+          <p-badge [value]="statusLabel(task()!.status)" severity="info" />
+        }
+      </div>
+
+      @if (editMode() || task()!.due_date) {
+        <div class="detail-row">
+          <div class="row-label">
+            <i class="pi pi-calendar"></i>
+            <span>Echéance</span>
+          </div>
+          @if (editMode()) {
+            <p-datepicker 
+              formControlName="due_date_format" 
+              dateFormat="dd/mm/yy" 
+              [iconDisplay]="'input'" 
+              [showIcon]="true" 
+              inputId="icondisplay"
+              appendTo="body"
+              styleClass="detail-input"
+            />
+          } @else {
+            <span class="row-value">{{ task()!.due_date }}</span>
+          }
+        </div>
+      }
+
+      @if (!editMode()) {
+        <div class="detail-row">
+          <div class="row-label">
+            <i class="pi pi-users"></i>
+            <span>Assigné</span>
+          </div>
+          <span class="row-value">
+            <div class="card flex justify-center user_assign">
+              @for (user of userAssigned(); track $index) {
+                <p-avatar tooltipPosition="bottom" pTooltip="{{ user.firstname }} {{ user.lastname }}" image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" />
+              }
+            </div>
+          </span>
+        </div>
+      }
+
+      @if (editMode() || task()!.description) {
+        <div class="detail-row description-row">
+          <div class="row-label">
+            <i class="pi pi-align-left"></i>
+            <span>Description</span>
+          </div>
+          @if (editMode()) {
+            <div class="card description-editor">
+              <p-editor formControlName="description" [style]="{ height: '100px' }" />
+            </div>
+          } @else {
+            <div class="description-box" [innerHTML]="task()!.description"></div>
+          }
+        </div>
+      }
+
+      @if (editMode()) {
+        <div class="form-actions">
+          <p-button label="Annuler" severity="secondary" [text]="true" (onClick)="toggleEdit()" type="button" />
+          <p-button label="Enregistrer" type="submit" [disabled]="form.invalid" />
+        </div>
+      }
+    </form>
+  }
+</p-dialog>

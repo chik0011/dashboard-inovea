@@ -1,0 +1,36 @@
+.container-darkmode {
+    display: flex;
+    width: 100%;
+}
+
+.container-darkmode {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.33em;
+    border: solid 1px rgb(212, 212, 212);
+    width: 50em;
+    padding: 1em;
+    border-radius: 5px;
+}
+
+.conatainer-left {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    width: 30em;
+    font-size: 13px;
+
+    label {
+        font-weight: 500;
+    }
+
+    span {
+        color: gray;
+    }
+}
+
+.p-toggleswitch-input {
+  background: purple !important;
+}

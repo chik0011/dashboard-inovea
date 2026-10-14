@@ -1,0 +1,120 @@
+.container-metrics-tickets {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    width: 100%;
+    gap: 1rem;
+}
+
+.metric {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 20rem;
+    height: 8rem;
+    background-color: white;
+    border: 1px solid rgb(230, 230, 230);
+    padding: 1rem 1.25rem;
+    border-radius: 14px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+
+    .metric-header {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 0.5rem;
+
+        .metric-icon-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 5px;
+            background-color: #F9F9F9;
+
+            i {
+                font-size: 0.9rem;
+                color: #64748B;
+            }
+        }
+
+        label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #64748B;
+        }
+    }
+}
+
+.metric-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    flex: 1;
+
+    .metric-diag {
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+    }
+
+    .metric-value {
+        font-size: 2.2em;
+        font-weight: 600;
+        line-height: 1;
+        color: #1E1E2D;
+    }
+
+    .metric-trend {
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        font-size: 0.75rem;
+
+        strong {
+            font-weight: 600;
+
+            &.negative {
+                color: #EF4444;
+            }
+
+            &.positive {
+                color: #22C55E;
+            }
+        }
+
+        .trend-label {
+            color: #94A3B8;
+        }
+    }
+
+    .metric-img {
+        .sparkline {
+            width: 3.5rem;
+            height: auto;
+        }
+
+        .metric-diag-user {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .bg-grey {
+            background-color: #F9F9F9;
+            padding: 3px 10px 3px 10px;
+            border-radius: 8px;
+        }
+    }
+
+    .user-content {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 5px;
+    }
+}

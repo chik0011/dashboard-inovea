@@ -1,0 +1,131 @@
+<div class="container-metrics-tickets">
+    <div class="metric">
+        <div class="metric-header">
+            <div class="metric-icon-wrapper">
+                <i class="pi pi-ticket"></i>
+            </div>
+            <label for="title-metric">À traiter</label>
+        </div>
+        <hr>
+        <div class="metric-content">
+            <div class="metric-diag">
+                <span class="metric-value">{{ toProcess() }}</span>
+                <div class="metric-trend">
+                    <strong [class.negative]="processNegative()" [class.positive]="processPositive()">{{toProcessEvolution()}}%</strong>
+                    <span class="trend-label"> cette semaine</span>
+                </div>
+            </div>
+            <div class="metric-img">
+                <img
+                    [src]="'assets/icons/ticket/sparkline-up.svg'"
+                    class="sparkline"
+                    alt="tendance"
+                />
+            </div>
+        </div>
+    </div>
+
+    <div class="metric">
+        <div class="metric-header">
+            <div class="metric-icon-wrapper">
+                <i class="pi pi-user"></i>
+            </div>
+            <label for="title-metric">Tickets assigné à</label>
+        </div>
+        <hr>
+        <div class="metric-content">
+            <div class="metric-diag">
+                <span class="metric-value">{{ assigned() }}</span>
+            </div>
+            <div class="metric-img user-content">
+                @for (user of userAssigned(); track user.user_id) {
+                    <div class="metric-diag-user">
+                        <p-avatar
+                            pTooltip="{{user.name}}" 
+                            tooltipPosition="top"
+                            image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
+                            shape="circle">
+                        </p-avatar>
+                        <div class="metric-trend bg-grey">
+                            <span class="trend-label">{{user.count}}</span>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="metric">
+        <div class="metric-header">
+            <div class="metric-icon-wrapper">
+                <i class="pi pi-trophy"></i>
+            </div>
+            <label for="title-metric">Tickets résolus ce mois</label>
+        </div>
+        <hr>
+        <div class="metric-content">
+            <div class="metric-diag">
+                <span class="metric-value">{{ resolvedThisMonth() }}</span>
+                <div class="metric-trend">
+                    <strong [class.negative]="resolvedThisMonthNegative()" [class.positive]="resolvedThisMonthPositive()">{{ resolvedThisMonthEvolution() }}%</strong>
+                    <span class="trend-label"> mois dernier</span>
+                </div>
+            </div>
+            <div class="metric-img">
+                <img
+                    [src]="'assets/icons/ticket/sparkline-up-2.svg'"
+                    class="sparkline"
+                    alt="tendance"
+                />
+            </div>
+        </div>
+    </div>
+
+    <div class="metric">
+        <div class="metric-header">
+            <div class="metric-icon-wrapper">
+                <i class="pi pi-hourglass"></i>
+            </div>
+            <label for="title-metric">Tickets sans réponse (depuis 7 jours)</label>
+        </div>
+        <hr>
+        <div class="metric-content">
+            <div class="metric-diag">
+                <span class="metric-value">{{ noAnswerDays() }}</span>
+                <div class="metric-trend">
+                    <strong [class.negative]="noAnswerDaysNegative()" [class.positive]="noAnswerDaysPositive()">{{ noAnswerDaysEvolution() }}%</strong>
+                    <span class="trend-label"> mois dernier</span>
+                </div>
+            </div>
+            <div class="metric-img">
+                <img
+                    [src]="'assets/icons/ticket/sparkline-up-3.svg'"
+                    class="sparkline"
+                    alt="tendance"
+                />
+            </div>
+        </div>
+    </div>
+
+    <div class="metric">
+        <div class="metric-header">
+            <div class="metric-icon-wrapper">
+                <i class="pi pi-envelope"></i>
+            </div>
+            <label for="title-metric">Ticket ouvert aujourd'hui</label>
+        </div>
+        <hr>
+        <div class="metric-content">
+            <div class="metric-diag">
+                <span class="metric-value">{{ openedToday() }}</span>  
+            </div>
+            <div class="metric-img">
+                <img
+                    [src]="'assets/icons/ticket/sparkline-up.svg'"
+                    class="sparkline"
+                    alt="tendance"
+                />
+            </div>
+        </div>
+    </div>
+</div>
